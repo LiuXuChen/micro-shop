@@ -1,0 +1,408 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.jetco</groupId>
+    <artifactId>micro-shop</artifactId>
+    <version>1.0.0</version>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>common-server</module>
+        <module>account-server</module>
+        <module>order-server</module>
+        <module>goods-server</module>
+        <module>gateway-server</module>
+        <module>auth-server</module>
+    </modules>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+        <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
+        <spring-cloud.version>2.2.5.RELEASE</spring-cloud.version>
+        <spring-cloud-alibaba.version>2.2.5.RELEASE</spring-cloud-alibaba.version>
+        <dubbo.version>2.7.9</dubbo.version>
+        <feign-okhttp.version>11.1</feign-okhttp.version>
+        <sentinel.version>1.8.1</sentinel.version>
+        <spring-cloud-alibaba-seata.version>2.2.0.RELEASE</spring-cloud-alibaba-seata.version>
+        <seata.version>1.4.1</seata.version>
+
+        <ehcache.version>3.9.2</ehcache.version>
+        <mysql.version>8.0.15</mysql.version>
+        <druid.version>1.2.5</druid.version>
+        <mybatis.version>3.5.6</mybatis.version>
+        <mybatis-plus.version>3.3.2</mybatis-plus.version>
+        <p6spy.version>3.9.1</p6spy.version>
+        <jsqlparser.vserion>4.0</jsqlparser.vserion>
+        <jpa.version>2.2</jpa.version>
+        <knife4j.version>2.0.8</knife4j.version>
+        <swagger.version>1.5.22</swagger.version>
+        <log4j.verison>1.2.17</log4j.verison>
+        <slf4j.version>1.7.30</slf4j.version>
+        <guava.version>30.0-jre</guava.version>
+        <hutool.version>5.4.7</hutool.version>
+        <jackson.version>2.11.3</jackson.version>
+        <gson.version>2.8.6</gson.version>
+        <fastjson.version>1.2.75</fastjson.version>
+
+        <commons-lang3.version>3.10</commons-lang3.version>
+        <commons-compress.version>1.20</commons-compress.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <commons-text.version>1.8</commons-text.version>
+        <commons-io.version>2.6</commons-io.version>
+        <commons-discovery.version>0.2</commons-discovery.version>
+        <commons-codec.version>1.14</commons-codec.version>
+        <commons-pool2.version>1.6.2</commons-pool2.version>
+
+        <docker.host>http://10.211.55.8:2375</docker.host>
+        <docker.maven.plugin.version>1.2.2</docker.maven.plugin.version>
+
+        <skipTests>true</skipTests>
+        <maven.compiler.version>3.8.1</maven.compiler.version>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <!-- dubbo -->
+            <dependency>
+                <groupId>org.apache.dubbo</groupId>
+                <artifactId>dubbo-spring-boot-starter</artifactId>
+                <version>${dubbo.version}</version>
+            </dependency>
+
+            <!-- netflix-ribbon -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+                <version>${spring-cloud.version}</version>
+            </dependency>
+
+            <!-- openfeign -->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-openfeign</artifactId>
+                <version>${spring-cloud.version}</version>
+            </dependency>
+
+            <!-- feign-okhttp -->
+            <dependency>
+                <groupId>io.github.openfeign</groupId>
+                <artifactId>feign-okhttp</artifactId>
+                <version>${feign-okhttp.version}</version>
+            </dependency>
+
+            <!-- Alibaba Sentinel -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-starter-alibaba-sentinel</artifactId>
+                <version>${spring-cloud-alibaba.version}</version>
+            </dependency>
+
+            <!-- Alibaba Sentinel -->
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-spring-cloud-gateway-adapter</artifactId>
+                <version>${sentinel.version}</version>
+            </dependency>
+
+            <!-- sentinel-datasource-nacos -->
+            <dependency>
+                <groupId>com.alibaba.csp</groupId>
+                <artifactId>sentinel-datasource-nacos</artifactId>
+                <version>${sentinel.version}</version>
+            </dependency>
+
+            <!-- Spring Cloud Gateway-->
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-gateway</artifactId>
+                <version>${spring-cloud.version}</version>
+            </dependency>
+
+            <!-- spring-cloud-alibaba-seata -->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-seata</artifactId>
+                <version>${spring-cloud-alibaba-seata.version}</version>
+            </dependency>
+
+            <!-- seata 客户端最新版 -->
+            <dependency>
+                <groupId>io.seata</groupId>
+                <artifactId>seata-all</artifactId>
+                <version>${seata.version}</version>
+            </dependency>
+
+            <!-- seata-config-nacos -->
+            <dependency>
+                <groupId>io.seata</groupId>
+                <artifactId>seata-config-nacos</artifactId>
+                <version>${seata.version}</version>
+            </dependency>
+
+            <!-- seata-spring-boot-starter -->
+            <dependency>
+                <groupId>io.seata</groupId>
+                <artifactId>seata-spring-boot-starter</artifactId>
+                <version>${seata.version}</version>
+            </dependency>
+
+            <!-- swagger2文档 -->
+            <!-- knife4j-micro-spring-boot-starter -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-micro-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+            <!-- knife4j-spring-boot-starter -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+
+            <!-- jpa -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+                <version>${spring-boot.version}</version>
+            </dependency>
+
+            <!-- druid-spring-boot-starter -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <!-- mybatis-plus -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <!-- p6spy -->
+            <dependency>
+                <groupId>p6spy</groupId>
+                <artifactId>p6spy</artifactId>
+                <version>${p6spy.version}</version>
+            </dependency>
+
+            <!-- java持久化api -->
+            <dependency>
+                <groupId>javax.persistence</groupId>
+                <artifactId>javax.persistence-api</artifactId>
+                <version>${jpa.version}</version>
+            </dependency>
+
+            <!-- 必须使用0.9以上的版本 -->
+            <dependency>
+                <groupId>com.github.jsqlparser</groupId>
+                <artifactId>jsqlparser</artifactId>
+                <version>${jsqlparser.vserion}</version>
+            </dependency>
+
+            <!-- json解析 start -->
+            <!-- 利用jackson进行json序列化化和反序列化 -->
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${jackson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
+            </dependency>
+            <!-- google gson -->
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+            <!-- json解析 end -->
+
+            <!-- hutool java工具类库  -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+            <!-- guava工具类 -->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${guava.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
+            </dependency>
+
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <!-- 配置文件提示 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- nacos注册中心 -->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+        </dependency>
+
+        <!-- 参数校验 spring-boot-starter-validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <!-- 日志 start -->
+        <!-- slf4j-log4j12 -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <!-- log4j -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.verison}</version>
+        </dependency>
+        <!-- 日志 end -->
+
+        <!-- swagger-models -->
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-models</artifactId>
+            <version>${swagger.version}</version>
+        </dependency>
+
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+
+        <!-- test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring-boot.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>${docker.maven.plugin.version}</version>
+                    <!--将插件绑定在某个phase执行-->
+                    <executions>
+                        <execution>
+                            <id>build-image</id>
+                            <!-- 只需执行mvn package ，就会自动执行mvn docker:build -->
+                            <phase>package</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <!-- 指定生成的镜像名 -->
+                        <imageName>${project.artifactId}:${project.version}</imageName>
+                        <!-- 指定 Dockerfile 路径 -->
+                        <!--                        <dockerDirectory>src/main/docker</dockerDirectory>-->
+                        <!-- 指定远程 docker api地址 -->
+                        <dockerHost>${docker.host}</dockerHost>
+                        <!-- Dockerfile内容 -->
+                        <!-- 基础镜像 -->
+                        <baseImage>java:8</baseImage>
+                        <!-- 配置容器以及配置文件，使其可执行化 -->
+                        <entryPoint>["sh", "-c", "java", "-jar", "-Dspring.profiles.active=dev","/${project.build.finalName}.jar"]</entryPoint>
+                        <!-- 这里是复制 jar 包到 docker 容器指定目录配置 -->
+                        <resources>
+                            <resource>
+                                <targetPath>/</targetPath>
+                                <directory>${project.build.directory}</directory>
+                                <include>${project.build.finalName}.jar</include>
+                            </resource>
+                        </resources>
+                        <!-- 指定标签 -->
+                        <imageTags>
+                            <imageTag>${project.version}</imageTag>
+                            <imageTag>latest</imageTag>
+                        </imageTags>
+                        <!-- 是否推送到docker私有仓库 -->
+                        <pushImage>false</pushImage>
+                        <registryUrl></registryUrl>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
+
+</project>

@@ -1,0 +1,109 @@
+server:
+  port: 9001
+# seata配置
+seata:
+  # 开启seata分布式事务
+  enabled: true
+  # 事务服务分组名，与nacos一致
+  tx-service-group: my_test_tx_group
+  # 是否启用数据源代理
+  enable-auto-data-source-proxy: true
+  # 事务服务配置
+  service:
+    vgroup-mapping:
+      # 事务分组对应集群名称
+      my_test_tx_group: default
+    grouplist:
+      # seata-server服务的地址与端口
+      default: 10.211.55.8:8091
+    enable-degrade: false
+    disable-global-transaction: false
+  # nacos注册中心信息
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 10.211.55.8:8848
+      group: SEATA_GROUP
+      namespace:
+      username: nacos
+      password: nacos
+      cluster: default
+  # nacos配置中心信息
+  config:
+    type: nacos
+    nacos:
+      namespace:
+      group: SEATA_GROUP
+      server-addr: 10.211.55.8:8848
+      username: nacos
+      password: nacos
+
+# 应用配置
+spring:
+  application:
+    name: account-server
+  datasource:
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    url: jdbc:p6spy:mysql://10.211.55.8:3306/account?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&useSSL=false
+    username: root
+    password: 123456
+  cloud:
+    sentinel:
+      transport:
+        dashboard: 10.211.55.8:9100
+      eager: true
+      datasource:
+        # 数据源名称，可以自定义
+        flow:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            # 定义流控规则data-id,完整名称为：order-service-flow-rules，在配置中心设置时data-id必须对应
+            dataId: ${spring.application.name}-flow-rules
+            # groupId对应配置文件分组，对应配置中心groups项
+            groupId: DEFAULT_GROUP
+            # flow固定写死，说明这个配置是流控规则
+            rule-type: flow
+            username: ${spring.cloud.nacos.discovery.username}
+            password: ${spring.cloud.nacos.discovery.password}
+        # 熔断规则
+        degrade:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            # 定义流控规则data-id,完整名称为：order-service-degrade-rules，在配置中心设置时data-id必须对应
+            dataId: ${spring.application.name}-degrade-rules
+            # groupId对应配置文件分组，对应配置中心groups项
+            groupId: DEFAULT_GROUP
+            # flow固定写死，说明这个配置是熔断规则
+            rule-type: degrade
+            username: ${spring.cloud.nacos.discovery.username}
+            password: ${spring.cloud.nacos.discovery.password}
+    nacos:
+      discovery:
+        server-addr: 10.211.55.8:8848
+        username: nacos
+        password: nacos
+
+# openfeign配置
+feign:
+  okhttp:
+    enabled: true
+  compression:
+    request:
+      # 开启请求数据的压缩功能
+      enabled: true
+      # 压缩支持的MIME类型
+      mime-types: text/xml,application/xml,application/json
+      # 数据压缩下限 1024表示传输数据大于1024才会进行数据压缩
+      min-request-size: 1024
+    # 开启响应数据的压缩功能
+    response:
+      enabled: true
+
+logging:
+  level:
+    io:
+      seata: debug
+account:
+  name: 华为
+  age: 30

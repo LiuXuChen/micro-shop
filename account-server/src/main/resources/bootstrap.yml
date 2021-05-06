@@ -1,0 +1,6 @@
+spring:
+  application:
+    # 微服务ID
+    name: account-server
+  profiles:
+    active: dev

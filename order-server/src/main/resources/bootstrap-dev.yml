@@ -1,0 +1,16 @@
+# 开启debug日志，生产环境不建议开启
+logging:
+  level:
+    root: info
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: http://10.211.55.8:8848
+        username: nacos
+        password: nacos
+      config:
+        file-extension: yml
+        server-addr: http://10.211.55.8:8848
+        username: nacos
+        password: nacos

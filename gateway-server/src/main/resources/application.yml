@@ -1,0 +1,113 @@
+server:
+  port: 8888
+
+spring:
+  jackson:
+    default-property-inclusion: non_null
+  cloud:
+    # Sentinel Dashboard通信地址
+    sentinel:
+      transport:
+        dashboard: 10.211.55.8:9100
+      # 取消控制台赖加载
+      eager: true
+      datasource:
+        # 流控规则，数据源名称，可以自定义
+        flow:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            # 定义流控规则data-id,完整名称为：gateway-server-flow-rules，在配置中心设置时data-id必须对应
+            dataId: ${spring.application.name}-flow-rules
+            # groupId对应配置文件分组，对应配置中心groups项
+            groupId: DEFAULT_GROUP
+            # flow固定写死，说明这个配置是流控规则
+            rule-type: flow
+            username: ${spring.cloud.nacos.discovery.username}
+            password: ${spring.cloud.nacos.discovery.password}
+        # 熔断规则
+        degrade:
+          nacos:
+            server-addr: ${spring.cloud.nacos.discovery.server-addr}
+            # 定义流控规则data-id,完整名称为：gateway-server-degrade-rules，在配置中心设置时data-id必须对应
+            dataId: ${spring.application.name}-degrade-rules
+            # groupId对应配置文件分组，对应配置中心groups项
+            groupId: DEFAULT_GROUP
+            # flow固定写死，说明这个配置是熔断规则
+            rule-type: degrade
+            username: ${spring.cloud.nacos.discovery.username}
+            password: ${spring.cloud.nacos.discovery.password}
+
+    # Nacos通信地址
+    nacos:
+      discovery:
+        server-addr: 10.211.55.8:8848
+        username: nacos
+        password: nacos
+    # 通过Gateway实现路由转发
+    gateway:
+      discovery:
+        locator:
+          # locator.enable = true 是自动根据URL规则实现路由转发
+          enabled: false
+          # 表示将请求路径的服务名配置改成小写
+          lower-case-service-id: true
+      # 路由规则配置
+      routes:
+        # account-server路由配置，account-server路由规则
+        # id代表路由唯一标识
+        - id: account-server-route
+          # lb开头代表基于Gateway的负载均衡策略选择实例
+          uri: lb://account-server
+          # 谓词配置
+          predicates:
+            # Path路径谓词，代表用户端URI如果以/gateway/account-server/开头便会转发到account-server实例
+            - Path=/gateway/account-server/**
+          # 谓词配置
+          filters:
+            # 截取掉第二层请求路径进行转发，数字从0开始
+            - StripPrefix=2
+            # 对所有匹配的请求追加查询参数clientId=1
+            - AddRequestParameter=clientId,1
+            # 当后端不可用时，网关会根据配置参数来发起重试请求
+            # name是内置的过滤器名
+            - name: Retry
+              # 参数部分使用args说明，当后端服务返回503状态码的响应时，Retry过滤器会重新发起请求，最多重试3次
+              args:
+                retries: 3
+                status: 503
+        # goods-server路由配置，goods-server路由规则
+        - id: goods-server-route
+          uri: lb://goods-server
+          predicates:
+            - Path=/gateway/goods-server/**
+            # 代表HTTP方法符合规定时生效
+            - Method=GET
+          filters:
+            - StripPrefix=2
+        # order-server路由配置，order-server路由规则
+        - id: order-server-route
+          uri: lb://order-server
+          predicates:
+            - Path=/gateway/order-server/**
+            # 代表HTTP方法符合规定时生效
+#            - Method=POST
+          filters:
+            - StripPrefix=2
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+management:
+  endpoints:
+    web:
+      exposure:
+        # 对外暴露actuator所有监控指标，便于监控系统收集跟踪
+        include: '*'
+  endpoint:
+    health:
+      # 总是显示健康检测详情
+      show-details: always
+
+logging:
+  level:
+    root: info
+    org.springframework:cloud.gateway: debug

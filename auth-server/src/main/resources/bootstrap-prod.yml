@@ -1,0 +1,12 @@
+# 开启info日志
+logging:
+  level:
+    root: info
+spring:
+  cloud:
+    nacos:
+      config:
+        file-extension: yml
+        server-addr: 10.211.55.8:8848
+        username: nacos
+        password: nacos
